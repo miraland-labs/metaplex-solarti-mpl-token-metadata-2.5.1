@@ -3,7 +3,7 @@ export * from './constants';
 export * from './errors';
 export * from './minter';
 
-import { Keypair, PublicKey } from '@solana/web3.js';
+import { Keypair, PublicKey } from '@solarti/web3.js';
 import { BN } from 'bn.js';
 import { CandyMachineData } from '../../src/generated';
 import { HIDDEN_SECTION } from './constants';

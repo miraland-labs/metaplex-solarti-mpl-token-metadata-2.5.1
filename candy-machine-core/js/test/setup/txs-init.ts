@@ -4,7 +4,7 @@ import {
   LoadOrGenKeypair,
   LOCALHOST,
   PayerTransactionHandler,
-} from '@metaplex-foundation/amman-client';
+} from '@metaplex-solarti/amman-client';
 import {
   Connection,
   Keypair,
@@ -13,28 +13,29 @@ import {
   SYSVAR_SLOT_HASHES_PUBKEY,
   Transaction,
   TransactionInstruction,
-} from '@solana/web3.js';
+} from '@solarti/web3.js';
 import {
+  getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
   createInitializeMintInstruction,
   createMintToInstruction,
   MintLayout,
   TOKEN_PROGRAM_ID,
-} from '@solana/spl-token';
+} from '@solarti/spl-token';
 import { Test } from 'tape';
 import * as program from '../../src/generated';
 import { CandyMachine, CandyMachineData } from '../../src/generated';
 import { amman } from '.';
 import { COLLECTION_METADATA, getCandyMachineSpace } from '../utils';
 import {
-  findAssociatedTokenAccountPda,
-  findCandyMachineCreatorPda,
-  findCollectionAuthorityRecordPda,
-  findMasterEditionV2Pda,
-  findMetadataPda,
+  // findAssociatedTokenAccountPda,
+  findCandyMachineV2CreatorPda,
+  // findCollectionAuthorityRecordPda,
+  // findMasterEditionV2Pda,
+  // findMetadataPda,
   keypairIdentity,
   Metaplex,
-} from '@metaplex-foundation/js';
+} from '@metaplex-solarti/js';
 
 const METAPLEX_PROGRAM_ID = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s');
 
@@ -109,24 +110,24 @@ export class InitTransactions {
         uri: COLLECTION_METADATA,
         name: 'CORE Collection',
         sellerFeeBasisPoints: 500,
-      })
-      .run();
+      });
 
     const [, candyMachine] = await this.getKeypair('Candy Machine Account');
-    const authorityPda = findCandyMachineCreatorPda(candyMachine.publicKey, program.PROGRAM_ID);
+    const authorityPda = findCandyMachineV2CreatorPda(candyMachine.publicKey, program.PROGRAM_ID);
 
     await amman.addr.addLabel('Collection Mint', collection.address);
 
-    const collectionAuthorityRecord = findCollectionAuthorityRecordPda(
-      collection.mint.address,
-      authorityPda,
+    // m17 deprecated
+    // findCollectionAuthorityRecordPda
+    const collectionAuthorityRecord = metaplex.nfts().pdas().collectionAuthorityRecord(
+      {mint: collection.mint.address, collectionAuthority: collection.mint.mintAuthorityAddress}
     );
     await amman.addr.addLabel('Collection Authority Record', collectionAuthorityRecord);
 
-    const collectionMetadata = findMetadataPda(collection.mint.address);
+    const collectionMetadata = metaplex.nfts().pdas().metadata({mint: collection.mint.address});
     await amman.addr.addLabel('Collection Metadata', collectionMetadata);
 
-    const collectionMasterEdition = findMasterEditionV2Pda(collection.mint.address);
+    const collectionMasterEdition = metaplex.nfts().pdas().masterEdition({mint: collection.mint.address});
     await amman.addr.addLabel('Collection Master Edition', collectionMasterEdition);
 
     const accounts: program.InitializeInstructionAccounts = {
@@ -231,23 +232,22 @@ export class InitTransactions {
     // mint address
     const [nftMint, mintPair] = await this.getKeypair('mint');
     await amman.addr.addLabel('NFT Mint', nftMint);
+    const metaplex = Metaplex.make(connection).use(keypairIdentity(payer));
     // PDAs required for the mint
-    const nftMetadata = findMetadataPda(nftMint);
-    const nftMasterEdition = findMasterEditionV2Pda(nftMint);
-    const nftTokenAccount = findAssociatedTokenAccountPda(nftMint, payer.publicKey);
-
+    const nftMetadata = metaplex.nfts().pdas().metadata({mint: nftMint});
+    const nftMasterEdition = metaplex.nfts().pdas().masterEdition({mint: nftMint});
+    // const nftTokenAccount = findAssociatedTokenAccountPda(nftMint, payer.publicKey);
+    const nftTokenAccount = await getAssociatedTokenAddress(nftMint, payer.publicKey);
     const collectionMint = candyMachineObject.collectionMint;
     // retrieves the collection nft
-    const metaplex = Metaplex.make(connection).use(keypairIdentity(payer));
-    const collection = await metaplex.nfts().findByMint({ mintAddress: collectionMint }).run();
+    const collection = await metaplex.nfts().findByMint({ mintAddress: collectionMint });
     // collection PDAs
-    const authorityPda = findCandyMachineCreatorPda(candyMachine, program.PROGRAM_ID);
-    const collectionAuthorityRecord = findCollectionAuthorityRecordPda(
-      collectionMint,
-      authorityPda,
+    const authorityPda = findCandyMachineV2CreatorPda(candyMachine, program.PROGRAM_ID);
+    const collectionAuthorityRecord = metaplex.nfts().pdas().collectionAuthorityRecord(
+      {mint: collectionMint, collectionAuthority: collection.mint.mintAuthorityAddress}
     );
-    const collectionMetadata = findMetadataPda(collectionMint);
-    const collectionMasterEdition = findMasterEditionV2Pda(collectionMint);
+    const collectionMetadata = metaplex.nfts().pdas().metadata({mint: collectionMint});
+    const collectionMasterEdition = metaplex.nfts().pdas().masterEdition({mint: collectionMint});
 
     const accounts: program.MintInstructionAccounts = {
       candyMachine: candyMachine,

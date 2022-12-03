@@ -6,8 +6,8 @@
  */
 
 import * as beet from '@metaplex-foundation/beet';
-import * as web3 from '@solana/web3.js';
-import * as beetSolana from '@metaplex-foundation/beet-solana';
+import * as web3 from '@solarti/web3.js';
+import * as beetSolana from '@metaplex-solarti/beet-solana';
 import { CandyMachineData, candyMachineDataBeet } from '../types/CandyMachineData';
 
 /**

@@ -1,3 +1,7 @@
+# Solarti mpl-candy-machine-core
+
+Solarti adaption derived from Metaplex Program Library: mpl-candy-machine-core-0.1.2
+
 # mpl-candy-machine-core
 
 This package contains the Metaplex Candy Machine Core contract SDK code.

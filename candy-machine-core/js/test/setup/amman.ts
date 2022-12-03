@@ -1,4 +1,4 @@
-import { Amman } from '@metaplex-foundation/amman-client';
+import { Amman } from '@metaplex-solarti/amman-client';
 import { cusper } from '../utils/errors';
 
 import { PROGRAM_ADDRESS } from '../../src/generated';

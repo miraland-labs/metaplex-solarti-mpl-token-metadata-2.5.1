@@ -1,3 +1,8 @@
+# Solarti Metaplex Program Library
+
+Derived from Metaplex Program Library
+For the purpose of mpl-token-metadata-2.5.1 and mpl-candy-machine-core-0.1.2
+
 # Metaplex Program Library
 
 Metaplex smart contracts and SDK.
