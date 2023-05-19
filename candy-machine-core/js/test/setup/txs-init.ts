@@ -4,7 +4,7 @@ import {
   LoadOrGenKeypair,
   LOCALHOST,
   PayerTransactionHandler,
-} from '@metaplex-solarti/amman-client';
+} from '@miraplex/amman-client';
 import {
   Connection,
   Keypair,
@@ -21,7 +21,7 @@ import {
   createMintToInstruction,
   MintLayout,
   TOKEN_PROGRAM_ID,
-} from '@solarti/spl-token';
+} from '@solarti/solarti-token';
 import { Test } from 'tape';
 import * as program from '../../src/generated';
 import { CandyMachine, CandyMachineData } from '../../src/generated';

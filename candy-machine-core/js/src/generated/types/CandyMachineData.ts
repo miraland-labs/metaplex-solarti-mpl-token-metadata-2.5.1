@@ -5,7 +5,7 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet';
+import * as beet from '@miraplex/beet';
 import { Creator, creatorBeet } from './Creator';
 import { ConfigLineSettings, configLineSettingsBeet } from './ConfigLineSettings';
 import { HiddenSettings, hiddenSettingsBeet } from './HiddenSettings';

@@ -6,8 +6,8 @@
  */
 
 import * as web3 from '@solarti/web3.js';
-import * as beetSolana from '@metaplex-solarti/beet-solana';
-import * as beet from '@metaplex-foundation/beet';
+import * as beetSolana from '@miraplex/beet-miraland';
+import * as beet from '@miraplex/beet';
 export type Creator = {
   address: web3.PublicKey;
   verified: boolean;

@@ -6,8 +6,8 @@
  */
 
 import * as web3 from '@solarti/web3.js';
-import * as beetSolana from '@metaplex-solarti/beet-solana';
-import * as beet from '@metaplex-foundation/beet';
+import * as beetSolana from '@miraplex/beet-miraland';
+import * as beet from '@miraplex/beet';
 
 /**
  * @category Instructions
@@ -62,7 +62,7 @@ export const setAuthorityInstructionDiscriminator = [133, 250, 37, 21, 110, 163,
 export function createSetAuthorityInstruction(
   accounts: SetAuthorityInstructionAccounts,
   args: SetAuthorityInstructionArgs,
-  programId = new web3.PublicKey('CndyV3LdqHUfDLmE5naZjVN8rBZz4tqhdefbAnjHG3JR'),
+  programId = new web3.PublicKey('CMv3YQQ7nbhFUjArAcGuRcDa6avoYN1a72HRZMvJ6WnU'),
 ) {
   const [data] = setAuthorityStruct.serialize({
     instructionDiscriminator: setAuthorityInstructionDiscriminator,
